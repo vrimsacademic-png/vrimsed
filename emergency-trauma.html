@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Emergency & Trauma Centre | VRIMS</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<style>
+  :root {
+    --navy:#0d2461; --blue:#1a56db; --blue-light:#3b82f6; --sky:#e8f0fe;
+    --red:#dc2626; --gold:#d97706; --white:#ffffff;
+    --gray-50:#f8fafc; --gray-100:#f1f5f9; --gray-200:#e2e8f0;
+    --gray-600:#475569; --gray-800:#1e293b;
+    --shadow-sm:0 1px 3px rgba(0,0,0,.08);
+    --shadow:0 4px 20px rgba(13,36,97,.12);
+    --shadow-lg:0 12px 40px rgba(13,36,97,.18);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:'DM Sans',sans-serif;color:var(--gray-800);background:#fff}
+
+  /* TOP BAR */
+  .emergency-bar{background:linear-gradient(90deg,#dc2626,#b91c1c);color:#fff;text-align:center;padding:.35rem;font-size:.8rem;font-weight:600;letter-spacing:.03em;animation:pulse-bar 2s ease-in-out infinite}
+  @keyframes pulse-bar{0%,100%{opacity:1}50%{opacity:.85}}
+  .top-bar{background:var(--navy);color:#cdd8f6;font-size:.78rem;padding:.45rem 0}
+  .top-bar .tb-inner{max-width:1300px;margin:0 auto;padding:0 1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.4rem}
+  .top-bar a{color:#cdd8f6;text-decoration:none}
+  .tb-left{display:flex;gap:1.2rem;align-items:center;flex-wrap:wrap}
+  .tb-right{display:flex;gap:.6rem}
+  .tb-btn{padding:.28rem .8rem;border-radius:20px;font-size:.72rem;font-weight:600;cursor:pointer;border:none;text-decoration:none;transition:.2s}
+  .tb-btn.pay{background:var(--gold);color:#fff}
+  .tb-btn.patient{background:var(--blue);color:#fff}
+  .tb-btn.student{background:#16a34a;color:#fff}
+
+  /* HEADER */
+  header{background:#fff;box-shadow:var(--shadow);position:sticky;top:0;z-index:1000}
+  .header-main{max-width:1300px;margin:0 auto;padding:.8rem 1.5rem;display:flex;align-items:center;gap:1.2rem}
+  .logo-wrap{display:flex;align-items:center;gap:1rem;flex-shrink:0}
+  .logo-wrap img{width:72px;height:72px;object-fit:contain;border-radius:50%}
+  .inst-name h1{font-family:'Playfair Display',serif;font-size:1.22rem;font-weight:800;color:var(--navy);line-height:1.2}
+  .inst-name p{font-size:.72rem;color:var(--gray-600);margin-top:.15rem}
+  .nmc-badge{background:linear-gradient(135deg,#064e3b,#065f46);color:#fff;font-size:.65rem;font-weight:700;padding:.25rem .65rem;border-radius:20px;white-space:nowrap;border:2px solid #10b981;letter-spacing:.04em}
+  .header-right{margin-left:auto;display:flex;gap:.5rem}
+  .hdr-btn{padding:.45rem 1rem;border-radius:6px;font-size:.78rem;font-weight:600;border:none;cursor:pointer;text-decoration:none;transition:.2s;display:flex;align-items:center;gap:.4rem}
+  .hdr-btn.emergency{background:var(--red);color:#fff}
+  .hdr-btn.appt{background:var(--blue);color:#fff}
+  .hdr-btn:hover{opacity:.88;transform:translateY(-1px)}
+
+  /* NAV */
+  .nav{background:var(--navy);position:sticky;top:88px;z-index:999;overflow:visible}
+  .nav-inner{width:100%;margin:10 auto;padding:0 1.5rem;display:flex;align-items:center;flex-wrap:nowrap;overflow:visible}
+  .nav-item{position:relative;flex-shrink:0}
+  .nav-item>a{display:flex;align-items:center;gap:.3rem;padding:.8rem .85rem;color:#cdd8f6;font-size:.78rem;font-weight:500;text-decoration:none;white-space:nowrap;transition:.2s;border-bottom:3px solid transparent}
+  .nav-item>a:hover,.nav-item>a.active{color:#fff;border-bottom-color:var(--gold);background:rgba(255,255,255,.06)}
+  .dropdown{display:none;position:fixed;background:#fff;min-width:200px;box-shadow:var(--shadow-lg);border-top:3px solid var(--blue);border-radius:0 0 8px 8px;z-index:9999;overflow:hidden}
+  .dropdown.open{display:block}
+  .dropdown a{display:block;padding:.6rem 1.1rem;font-size:.78rem;color:var(--gray-800);text-decoration:none;border-bottom:1px solid var(--gray-100);transition:.15s}
+  .dropdown a:hover{background:var(--sky);color:var(--blue);padding-left:1.4rem}
+
+  /* PAGE HERO */
+  .page-hero{background:linear-gradient(135deg,#7f1d1d 0%,#dc2626 50%,#ef4444 100%);padding:3.5rem 1.5rem 3rem;position:relative;overflow:hidden}
+  .page-hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Ccircle cx='50' cy='50' r='40' fill='none' stroke='rgba(255,255,255,0.05)' stroke-width='1'/%3E%3C/svg%3E") repeat;background-size:80px 80px}
+  .page-hero-inner{max-width:1300px;margin:0 auto;position:relative}
+  .breadcrumb{display:flex;align-items:center;gap:.5rem;font-size:.78rem;color:rgba(255,255,255,.75);margin-bottom:1rem}
+  .breadcrumb a{color:rgba(255,255,255,.75);text-decoration:none}
+  .breadcrumb a:hover{color:#fff}
+  .page-hero h1{font-family:'Playfair Display',serif;font-size:2.6rem;font-weight:800;color:#fff;line-height:1.15}
+  .page-hero p{color:rgba(255,255,255,.85);font-size:.95rem;margin-top:.6rem;max-width:620px;line-height:1.7}
+  .hero-alert{display:inline-flex;align-items:center;gap:.7rem;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:8px;padding:.6rem 1.2rem;margin-top:1.2rem;font-size:.85rem;font-weight:700;color:#fff}
+
+  /* SHARED */
+  .section-inner{max-width:1300px;margin:0 auto}
+  .section-title{text-align:center;margin-bottom:2.5rem}
+  .section-title .eyebrow{font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--red);margin-bottom:.5rem}
+  .section-title h2{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:var(--navy)}
+  .section-title .divider{width:56px;height:3px;background:linear-gradient(90deg,var(--red),var(--gold));margin:1rem auto 0;border-radius:2px}
+
+  /* STATS STRIP */
+  .stats-strip{background:linear-gradient(135deg,#7f1d1d,#dc2626);padding:2rem 1.5rem}
+  .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1rem;max-width:1300px;margin:0 auto}
+  .stat-box{text-align:center;color:#fff;padding:1.2rem .8rem;background:rgba(255,255,255,.1);border-radius:10px;border:1px solid rgba(255,255,255,.15);transition:.3s}
+  .stat-box:hover{background:rgba(255,255,255,.2);transform:translateY(-3px)}
+  .stat-box i{font-size:1.5rem;color:#fca5a5;margin-bottom:.4rem;display:block}
+  .stat-box .num{font-family:'Playfair Display',serif;font-size:2rem;font-weight:800;display:block}
+  .stat-box .label{font-size:.72rem;opacity:.85;margin-top:.2rem}
+
+  /* SERVICES GRID */
+  .services-section{padding:4rem 1.5rem;background:var(--gray-50)}
+  .svc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.2rem}
+  .svc-card{background:#fff;border-radius:12px;padding:1.5rem 1.2rem;box-shadow:var(--shadow-sm);border:1px solid var(--gray-200);transition:.25s;text-align:center}
+  .svc-card:hover{box-shadow:var(--shadow);transform:translateY(-4px);border-color:#fca5a5}
+  .svc-icon{width:54px;height:54px;border-radius:12px;background:#fee2e2;display:flex;align-items:center;justify-content:center;margin:0 auto .8rem;font-size:1.4rem;color:var(--red);transition:.25s}
+  .svc-card:hover .svc-icon{background:var(--red);color:#fff}
+  .svc-card h4{font-size:.88rem;font-weight:700;color:var(--navy);margin-bottom:.35rem}
+  .svc-card p{font-size:.76rem;color:var(--gray-600);line-height:1.55}
+
+  /* TEAM */
+  .team-section{padding:4rem 1.5rem;background:#fff}
+  .team-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1.3rem}
+  .team-card{background:var(--gray-50);border-radius:12px;padding:1.3rem 1rem;text-align:center;border:1px solid var(--gray-200);transition:.25s}
+  .team-card:hover{box-shadow:var(--shadow);border-color:var(--blue-light);transform:translateY(-3px)}
+  .team-avatar{width:72px;height:72px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;margin:0 auto .8rem;font-size:1.6rem;color:rgba(255,255,255,.5);border:3px solid #fff;box-shadow:var(--shadow-sm)}
+  .team-card h4{font-size:.85rem;font-weight:700;color:var(--navy);margin-bottom:.2rem}
+  .team-card .spec{font-size:.74rem;color:var(--blue);font-weight:600;margin-bottom:.3rem}
+  .team-card .qual{font-size:.72rem;color:var(--gray-600)}
+
+  /* FACILITIES */
+  .facilities-section{padding:4rem 1.5rem;background:var(--gray-50)}
+  .fac-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem}
+  .fac-item{background:#fff;border-radius:10px;padding:1.1rem 1.2rem;box-shadow:var(--shadow-sm);border-left:4px solid var(--red);display:flex;gap:.8rem;align-items:flex-start;transition:.2s}
+  .fac-item:hover{box-shadow:var(--shadow);transform:translateX(3px)}
+  .fac-item i{font-size:1.2rem;color:var(--red);margin-top:.1rem;flex-shrink:0}
+  .fac-item h4{font-size:.83rem;font-weight:700;color:var(--navy);margin-bottom:.2rem}
+  .fac-item p{font-size:.74rem;color:var(--gray-600);line-height:1.5}
+
+  /* PROTOCOLS */
+  .protocols-section{padding:4rem 1.5rem;background:#fff}
+  .proto-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.2rem}
+  .proto-card{background:linear-gradient(135deg,var(--navy),#1a3a80);color:#fff;border-radius:12px;padding:1.5rem 1.3rem;position:relative;overflow:hidden;transition:.25s}
+  .proto-card::before{content:'';position:absolute;top:-20px;right:-20px;width:80px;height:80px;background:rgba(255,255,255,.06);border-radius:50%}
+  .proto-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+  .proto-card i{font-size:1.8rem;color:var(--gold);margin-bottom:.8rem;display:block}
+  .proto-card h4{font-family:'Playfair Display',serif;font-size:1rem;margin-bottom:.5rem}
+  .proto-card p{font-size:.76rem;opacity:.85;line-height:1.6}
+
+  /* CONTACT STRIP */
+  .contact-strip{background:linear-gradient(135deg,#7f1d1d,#dc2626);padding:3rem 1.5rem;text-align:center;color:#fff}
+  .contact-strip h2{font-family:'Playfair Display',serif;font-size:2rem;margin-bottom:.8rem}
+  .contact-strip p{opacity:.85;margin-bottom:2rem;font-size:.9rem}
+  .contact-numbers{display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap}
+  .contact-num{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:1.2rem 2rem;text-align:center;transition:.2s;cursor:pointer;text-decoration:none;color:#fff}
+  .contact-num:hover{background:rgba(255,255,255,.22);transform:scale(1.04)}
+  .contact-num i{font-size:1.6rem;display:block;margin-bottom:.5rem}
+  .contact-num .cn-num{font-size:1.3rem;font-weight:800;display:block}
+  .contact-num span{font-size:.75rem;opacity:.85}
+
+  /* FOOTER */
+  footer{background:var(--gray-800);color:#94a3b8}
+  .footer-main{max-width:1300px;margin:0 auto;padding:3rem 1.5rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:2rem}
+  .footer-brand img{width:60px;height:60px;border-radius:50%;margin-bottom:1rem}
+  .footer-brand h3{font-family:'Playfair Display',serif;font-size:1rem;color:#fff;margin-bottom:.5rem}
+  .footer-brand p{font-size:.76rem;line-height:1.7}
+  .footer-col h4{font-size:.82rem;font-weight:700;color:#fff;margin-bottom:1rem;text-transform:uppercase;letter-spacing:.06em}
+  .footer-col a{display:block;font-size:.78rem;color:#94a3b8;text-decoration:none;margin-bottom:.4rem;transition:.15s}
+  .footer-col a:hover{color:#fff;padding-left:.3rem}
+  .social-row{display:flex;gap:.7rem;margin-top:1rem}
+  .social-icon{width:34px;height:34px;border-radius:8px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;color:#94a3b8;text-decoration:none;transition:.2s;font-size:.9rem}
+  .social-icon:hover{background:var(--blue);color:#fff}
+  .footer-bottom{border-top:1px solid rgba(255,255,255,.08);padding:1.2rem 1.5rem;text-align:center;font-size:.75rem;color:#64748b;max-width:1300px;margin:0 auto}
+
+  #scrollTop{position:fixed;bottom:1.5rem;right:1.5rem;width:44px;height:44px;background:var(--red);color:#fff;border:none;border-radius:50%;font-size:1.1rem;cursor:pointer;box-shadow:var(--shadow);transition:.2s;display:none;z-index:9999;align-items:center;justify-content:center}
+  #scrollTop:hover{background:#991b1b}
+
+  @media(max-width:600px){.header-main{flex-wrap:wrap}.header-right{display:none}.inst-name h1{font-size:.95rem}.page-hero h1{font-size:1.8rem}}
+</style>
+</head>
+<body>
+
+<div class="emergency-bar">🚨 24/7 Emergency: <strong>+91-9031818116</strong> &nbsp;|&nbsp; Ambulance: <strong>108</strong> &nbsp;|&nbsp; Trauma Team on standby 24×7</div>
+<div class="top-bar">
+  <div class="tb-inner">
+    <div class="tb-left">
+      <span><i class="fas fa-map-marker-alt"></i> Koyala Belwa, Chakia, East Champaran, Bihar</span>
+      <span><i class="fas fa-phone"></i> 06252-XXXXXX</span>
+      <span><i class="fas fa-envelope"></i> info@vrims.edu.in</span>
+    </div>
+    <div class="tb-right">
+      <a href="#" class="tb-btn pay"><i class="fas fa-credit-card"></i> Pay Online</a>
+      <a href="#" class="tb-btn patient"><i class="fas fa-user"></i> Patient Portal</a>
+      <a href="#" class="tb-btn student"><i class="fas fa-graduation-cap"></i> Student Portal</a>
+    </div>
+  </div>
+</div>
+
+<header>
+  <div class="header-main">
+    <div class="logo-wrap">
+      <img src="logo-croped.png" alt="VRIMS Logo">
+      <div class="inst-name">
+        <h1>Viraat Ramayan Institute of Medical Sciences</h1>
+        <p>Hospital &amp; Medical College &nbsp;|&nbsp; Koyala Belwa, Chakia, East Champaran, Bihar</p>
+        <span class="nmc-badge">✔ NMC Approved</span>
+      </div>
+    </div>
+    <div class="header-right">
+      <a href="#contact-strip" class="hdr-btn emergency"><i class="fas fa-ambulance"></i> Emergency: 108</a>
+      <a href="index.html#contact" class="hdr-btn appt"><i class="fas fa-calendar-check"></i> Book Appointment</a>
+    </div>
+  </div>
+</header>
+
+<nav class="nav">
+  <div class="nav-inner" id="navInner">
+    <div class="nav-item"><a href="index.html">Home</a></div>
+    <div class="nav-item" data-has-dropdown>
+      <a href="#">About Us <i class="fas fa-chevron-down" style="font-size:.6rem"></i></a>
+      <div class="dropdown">
+        <a href="chairman.html">Chairman Message</a>
+        <a href="director.html">Director Message</a>
+        <a href="#">Secretary Message</a>
+        <a href="pricipal.html">Principal Message</a>
+        <a href="#">Vision &amp; Mission</a>
+      </div>
+    </div>
+    <div class="nav-item"><a href="administration.html">Administration</a></div>
+    <div class="nav-item" data-has-dropdown>
+      <a href="#" class="active">Hospital Services <i class="fas fa-chevron-down" style="font-size:.6rem"></i></a>
+      <div class="dropdown">
+        <a href="emergency-trauma.html">Emergency &amp; Trauma</a>
+        <a href="icu-nicu-picu.html">ICU / NICU / PICU</a>
+        <a href="blood-bank.html">Blood Bank</a>
+        <a href="dialysis.html">Dialysis Unit</a>
+        <a href="telemedicine.html">Telemedicine</a>
+      </div>
+    </div>
+    <div class="nav-item"><a href="index.html#academics">Medical College</a></div>
+    <div class="nav-item"><a href="index.html#departments">Departments</a></div>
+    <div class="nav-item"><a href="academic.html">Academics</a></div>
+    <div class="nav-item"><a href="#">Research</a></div>
+    <div class="nav-item"><a href="index.html#opd">OPD Services</a></div>
+    <div class="nav-item"><a href="#">IPD Services</a></div>
+    <div class="nav-item"><a href="emergency-trauma.html" class="active">Emergency</a></div>
+    <div class="nav-item"><a href="#">Faculty</a></div>
+    <div class="nav-item"><a href="index.html#nmc">NMC Details</a></div>
+    <div class="nav-item"><a href="index.html#notice">Notices</a></div>
+    <div class="nav-item"><a href="index.html#gallery">Gallery</a></div>
+    <div class="nav-item"><a href="#">Careers</a></div>
+    <div class="nav-item"><a href="index.html#contact">Contact Us</a></div>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <div class="breadcrumb">
+      <a href="index.html"><i class="fas fa-index"></i> Home</a>
+      <i class="fas fa-chevron-right"></i>
+      <a href="#">Hospital Services</a>
+      <i class="fas fa-chevron-right"></i>
+      <span>Emergency &amp; Trauma</span>
+    </div>
+    <h1>🚨 Emergency &amp; Trauma Centre</h1>
+    <p>VRIMS operates a fully equipped, round-the-clock Emergency and Trauma Centre with dedicated specialist teams, resuscitation bays, and advanced life-support systems — ready every minute of every day.</p>
+    <div class="hero-alert"><i class="fas fa-phone-volume"></i> Emergency Helpline: +91-9031818116 &nbsp;|&nbsp; Ambulance: 108</div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-strip">
+  <div class="stats-row">
+    <div class="stat-box"><i class="fas fa-clock"></i><span class="num">24×7</span><div class="label">Emergency Services</div></div>
+    <div class="stat-box"><i class="fas fa-ambulance"></i><span class="num">8</span><div class="label">Ambulances</div></div>
+    <div class="stat-box"><i class="fas fa-procedures"></i><span class="num">12</span><div class="label">Resuscitation Bays</div></div>
+    <div class="stat-box"><i class="fas fa-user-md"></i><span class="num">20+</span><div class="label">Emergency Doctors</div></div>
+    <div class="stat-box"><i class="fas fa-heartbeat"></i><span class="num">5 min</span><div class="label">Response Time</div></div>
+    <div class="stat-box"><i class="fas fa-stethoscope"></i><span class="num">50+</span><div class="label">Emergency Beds</div></div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="services-section">
+  <div class="section-inner">
+    <div class="section-title">
+      <div class="eyebrow">What We Offer</div>
+      <h2>Emergency Services</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="svc-grid">
+      <div class="svc-card"><div class="svc-icon"><i class="fas fa-first-aid"></i></div><h4>Trauma Resuscitation</h4><p>Advanced trauma life support (ATLS) protocols with dedicated trauma bays and rapid-response teams.</p></div>
+      <div class="svc-card"><div class="svc-icon"><i class="fas fa-heart"></i></div><h4>Cardiac Emergency</h4><p>24×7 ECG, thrombolysis, and cardiac monitoring. Cardiologist on call for chest pain &amp; MI management.</p></div>
+      <div class="svc-card"><div class="svc-icon"><i class="fas fa-brain"></i></div><h4>Neuro Emergency</h4><p>Stroke protocol, CT-guided triage, neurosurgeon on-call for head injuries and CNS emergencies.</p></div>
+      <div class="svc-card"><div class="svc-icon"><i class="fas fa-baby"></i></div><h4>Pediatric Emergency</h4><p>Dedicated pediatric emergency bay with trained neonatologist and pediatric intensivist support.</p></div>
+      <div class="svc-card"><div class="svc-icon"><i class="fas fa-venus"></i></div><h4>Obstetric Emergency</h4><p>High-risk obstetric emergencies managed with direct OT access and NICU backup.</p></div>
+      <div class="svc-card"><div class="svc-icon"><i class="fas fa-fire"></i></div><h4>Burns Management</h4><p>Dedicated burns management unit with dressing room, fluid resuscitation protocol, and ICU referral.</p></div>
+      <div class="svc-card"><div class="svc-icon"><i class="fas fa-bone"></i></div><h4>Ortho Trauma</h4><p>Poly-trauma management, fracture splinting, traction, and emergency orthopaedic surgeries.</p></div>
+      <div class="svc-card"><div class="svc-icon"><i class="fas fa-pills"></i></div><h4>Toxicology / Poisoning</h4><p>Overdose &amp; poisoning management with antidote protocol, gastric lavage, and ICU escalation.</p></div>
+      <div class="svc-card"><div class="svc-icon"><i class="fas fa-wind"></i></div><h4>Respiratory Emergency</h4><p>Nebulisation, mechanical ventilation, NIV therapy for asthma, COPD, and acute respiratory failure.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FACILITIES -->
+<section class="facilities-section">
+  <div class="section-inner">
+    <div class="section-title">
+      <div class="eyebrow">Infrastructure</div>
+      <h2>Facilities &amp; Equipment</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="fac-grid">
+      <div class="fac-item"><i class="fas fa-check-circle"></i><div><h4>Fully Equipped Trauma Bay</h4><p>4 dedicated trauma resuscitation bays with crash cart, defibrillator, and airway management tools.</p></div></div>
+      <div class="fac-item"><i class="fas fa-check-circle"></i><div><h4>Digital X-Ray &amp; CT (24×7)</h4><p>On-site digital radiography and CT scanner for rapid diagnostic imaging round the clock.</p></div></div>
+      <div class="fac-item"><i class="fas fa-check-circle"></i><div><h4>Emergency OT</h4><p>Dedicated emergency operation theatre adjacent to the casualty for immediate surgical interventions.</p></div></div>
+      <div class="fac-item"><i class="fas fa-check-circle"></i><div><h4>Point-of-Care Lab</h4><p>Rapid ABG, troponin, lactate, and blood glucose testing available inside the emergency department.</p></div></div>
+      <div class="fac-item"><i class="fas fa-check-circle"></i><div><h4>Ventilator Support</h4><p>Bedside mechanical ventilators and BiPAP/CPAP machines available in emergency observation area.</p></div></div>
+      <div class="fac-item"><i class="fas fa-check-circle"></i><div><h4>Blood Bank Interface</h4><p>Direct interface with 24×7 blood bank for rapid cross-matching and emergency transfusion.</p></div></div>
+      <div class="fac-item"><i class="fas fa-check-circle"></i><div><h4>Triage System</h4><p>Colour-coded triage (Red / Yellow / Green) managed by trained triage nurses at the entry point.</p></div></div>
+      <div class="fac-item"><i class="fas fa-check-circle"></i><div><h4>Ambulance Fleet</h4><p>8 fully-equipped ambulances with ALS capabilities, oxygen, and trained paramedics on board.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROTOCOLS -->
+<section class="protocols-section">
+  <div class="section-inner">
+    <div class="section-title">
+      <div class="eyebrow">Clinical Protocols</div>
+      <h2>Emergency Protocols in Place</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="proto-grid">
+      <div class="proto-card"><i class="fas fa-heart"></i><h4>Code Blue</h4><p>Cardiac / Respiratory Arrest — full resuscitation team activation within 2 minutes anywhere in the hospital.</p></div>
+      <div class="proto-card"><i class="fas fa-procedures"></i><h4>Trauma Code</h4><p>Polytrauma activation — simultaneous mobilisation of surgery, ortho, anaesthesia &amp; radiology.</p></div>
+      <div class="proto-card"><i class="fas fa-brain"></i><h4>Stroke Protocol</h4><p>Door-to-CT within 25 minutes. Thrombolysis decision within 60 minutes of arrival.</p></div>
+      <div class="proto-card"><i class="fas fa-baby"></i><h4>Neonatal Resuscitation</h4><p>NALS-trained team available for all emergency deliveries and neonatal distress situations.</p></div>
+      <div class="proto-card"><i class="fas fa-fire-extinguisher"></i><h4>Mass Casualty Incident</h4><p>MCI plan with surge capacity, field triage, and coordination with district health authorities.</p></div>
+      <div class="proto-card"><i class="fas fa-shield-virus"></i><h4>Isolation Protocol</h4><p>Dedicated isolation room for suspected infectious cases with PPE and negative-pressure management.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section class="team-section">
+  <div class="section-inner">
+    <div class="section-title">
+      <div class="eyebrow">Expert Team</div>
+      <h2>Emergency Medical Team</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="team-grid">
+      <div class="team-card"><div class="team-avatar"><i class="fas fa-user-md"></i></div><h4>Head of Emergency Medicine</h4><div class="spec">Emergency Medicine</div><div class="qual">MD (Emergency Medicine), ATLS Certified</div></div>
+      <div class="team-card"><div class="team-avatar"><i class="fas fa-user-md"></i></div><h4>Senior Trauma Surgeon</h4><div class="spec">General &amp; Trauma Surgery</div><div class="qual">MS (General Surgery), FACS</div></div>
+      <div class="team-card"><div class="team-avatar"><i class="fas fa-user-md"></i></div><h4>Neuro-Emergency Specialist</h4><div class="spec">Neurology / Neurosurgery</div><div class="qual">DM (Neurology), ATLS</div></div>
+      <div class="team-card"><div class="team-avatar"><i class="fas fa-user-md"></i></div><h4>Cardiac Emergency Physician</h4><div class="spec">Cardiology</div><div class="qual">DM (Cardiology), ACLS Certified</div></div>
+      <div class="team-card"><div class="team-avatar"><i class="fas fa-user-md"></i></div><h4>Pediatric Emergency Doctor</h4><div class="spec">Pediatrics</div><div class="qual">MD (Pediatrics), PALS Certified</div></div>
+      <div class="team-card"><div class="team-avatar"><i class="fas fa-user-md"></i></div><h4>Anaesthesia &amp; Critical Care</h4><div class="spec">Anaesthesiology</div><div class="qual">MD (Anaesthesia), EDIC</div></div>
+      <div class="team-card"><div class="team-avatar"><i class="fas fa-user-nurse"></i></div><h4>Chief Emergency Nurse</h4><div class="spec">Emergency Nursing</div><div class="qual">MSc Nursing, TNCC Certified</div></div>
+      <div class="team-card"><div class="team-avatar"><i class="fas fa-ambulance"></i></div><h4>Paramedic In-Charge</h4><div class="spec">Pre-Hospital Care</div><div class="qual">Diploma in Paramedical Sciences</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT STRIP -->
+<div id="contact-strip" class="contact-strip">
+  <h2>🚨 Need Emergency Help?</h2>
+  <p>Our trauma team is on standby 24 hours, 365 days. Don't wait — call immediately.</p>
+  <div class="contact-numbers">
+    <a class="contact-num" href="tel:108"><i class="fas fa-ambulance"></i><span class="cn-num">108</span><span>Ambulance</span></a>
+    <a class="contact-num" href="tel:+919031818116"><i class="fas fa-phone-alt"></i><span class="cn-num">+91-9031818116</span><span>Emergency Line</span></a>
+    <a class="contact-num" href="tel:+919031818119"><i class="fas fa-phone-alt"></i><span class="cn-num">+91-9031818119</span><span>Casualty Direct</span></a>
+    <a class="contact-num" href="index.html#contact"><i class="fas fa-calendar-check"></i><span class="cn-num">Book OPD</span><span>Non-Emergency</span></a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-main">
+    <div class="footer-brand">
+      <img src="logo-croped.png" alt="VRIMS">
+      <h3>Viraat Ramayan Institute of Medical Sciences</h3>
+      <p>A premier NMC-recognised institution dedicated to healthcare excellence in Bihar.</p>
+      <div class="social-row">
+        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Hospital Services</h4>
+      <a href="emergency-trauma.html">Emergency &amp; Trauma</a>
+      <a href="icu-nicu-picu.html">ICU / NICU / PICU</a>
+      <a href="blood-bank.html">Blood Bank</a>
+      <a href="dialysis.html">Dialysis Unit</a>
+      <a href="telemedicine.html">Telemedicine</a>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <a href="index.html">Home</a>
+      <a href="administration.html">Administration</a>
+      <a href="index.html#academics">Academics</a>
+      <a href="index.html#opd">OPD Schedule</a>
+      <a href="index.html#contact">Contact Us</a>
+    </div>
+    <div class="footer-col">
+      <h4>Emergency Numbers</h4>
+      <a href="tel:108">Ambulance: 108</a>
+      <a href="tel:+919031818116">Emergency: +91-9031818116</a>
+      <a href="tel:+919031818119">Casualty: +91-9031818119</a>
+      <a href="tel:18001805522">Anti-Ragging: 1800-180-5522</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Viraat Ramayan Institute of Medical Sciences, East Champaran, Bihar. All Rights Reserved.</p>
+  </div>
+</footer>
+
+<button id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="fas fa-arrow-up"></i></button>
+
+<script>
+(function(){
+  let active=null;
+  function open(item){close();const d=item.querySelector('.dropdown');if(!d)return;const r=item.getBoundingClientRect();d.style.top=r.bottom+'px';d.style.left=r.left+'px';d.classList.add('open');active={item,d}}
+  function close(){document.querySelectorAll('.dropdown.open').forEach(d=>d.classList.remove('open'));active=null}
+  function repos(){if(!active)return;const r=active.item.getBoundingClientRect();active.d.style.top=r.bottom+'px';active.d.style.left=r.left+'px'}
+  document.querySelectorAll('.nav-item[data-has-dropdown]').forEach(item=>{
+    item.addEventListener('mouseenter',()=>open(item));
+    item.addEventListener('mouseleave',e=>{const rel=e.relatedTarget;if(rel&&item.contains(rel))return;const dd=item.querySelector('.dropdown');if(rel&&dd&&dd.contains(rel))return;close()});
+    const dd=item.querySelector('.dropdown');if(dd)dd.addEventListener('mouseleave',e=>{const rel=e.relatedTarget;if(rel&&item.contains(rel))return;close()});
+  });
+  document.addEventListener('click',e=>{if(!e.target.closest('.nav-item[data-has-dropdown]'))close()});
+  window.addEventListener('scroll',repos,{passive:true});
+  window.addEventListener('resize',close);
+})();
+const sb=document.getElementById('scrollTop');
+window.addEventListener('scroll',()=>{sb.style.display=window.scrollY>400?'flex':'none'});
+</script>
+</body>
+</html>
