@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ICU / NICU / PICU Services | VRIMS – East Champaran, Bihar</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0d2461;
+    --blue: #1a56db;
+    --blue-light: #3b82f6;
+    --sky: #e8f0fe;
+    --red: #dc2626;
+    --gold: #d97706;
+    --white: #ffffff;
+    --gray-50: #f8fafc;
+    --gray-100: #f1f5f9;
+    --gray-200: #e2e8f0;
+    --gray-600: #475569;
+    --gray-800: #1e293b;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,.08);
+    --shadow: 0 4px 20px rgba(13,36,97,.12);
+    --shadow-lg: 0 12px 40px rgba(13,36,97,.18);
+    --icu-accent: #0ea5e9;
+    --nicu-accent: #f59e0b;
+    --picu-accent: #10b981;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { font-family:'DM Sans',sans-serif; color:var(--gray-800); background:var(--white); }
+
+  /* TOP BAR */
+  .top-bar { background:var(--navy); color:#cdd8f6; font-size:.78rem; padding:.45rem 0; }
+  .top-bar .tb-inner { max-width:1300px; margin:0 auto; padding:0 1.5rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:.4rem; }
+  .top-bar a { color:#cdd8f6; text-decoration:none; }
+  .tb-left { display:flex; gap:1.2rem; align-items:center; flex-wrap:wrap; }
+  .tb-right { display:flex; gap:.6rem; align-items:center; }
+  .tb-btn { padding:.28rem .8rem; border-radius:20px; font-size:.72rem; font-weight:600; cursor:pointer; border:none; text-decoration:none; transition:.2s; }
+  .tb-btn.pay { background:var(--gold); color:#fff; }
+  .tb-btn.patient { background:var(--blue); color:#fff; }
+  .tb-btn.student { background:#16a34a; color:#fff; }
+  .tb-btn:hover { opacity:.88; transform:translateY(-1px); }
+  .emergency-bar { background:linear-gradient(90deg,#dc2626,#b91c1c); color:#fff; text-align:center; padding:.35rem; font-size:.8rem; font-weight:600; letter-spacing:.03em; animation:pulse-bar 2s ease-in-out infinite; }
+  @keyframes pulse-bar { 0%,100%{opacity:1} 50%{opacity:.85} }
+
+  /* HEADER */
+  header { background:#fff; box-shadow:var(--shadow); position:sticky; top:0; z-index:1000; }
+  .header-main { max-width:1300px; margin:0 auto; padding:.8rem 1.5rem; display:flex; align-items:center; gap:1.2rem; }
+  .logo-wrap { display:flex; align-items:center; gap:1rem; flex-shrink:0; }
+  .logo-wrap img { width:72px; height:72px; object-fit:contain; border-radius:50%; }
+  .inst-name h1 { font-family:'Playfair Display',serif; font-size:1.22rem; font-weight:800; color:var(--navy); line-height:1.2; }
+  .inst-name p { font-size:.72rem; color:var(--gray-600); margin-top:.15rem; }
+  .nmc-badge { background:linear-gradient(135deg,#064e3b,#065f46); color:#fff; font-size:.65rem; font-weight:700; padding:.25rem .65rem; border-radius:20px; white-space:nowrap; border:2px solid #10b981; letter-spacing:.04em; }
+  .header-right { margin-left:auto; display:flex; gap:.5rem; }
+  .hdr-btn { padding:.45rem 1rem; border-radius:6px; font-size:.78rem; font-weight:600; border:none; cursor:pointer; text-decoration:none; transition:.2s; display:flex; align-items:center; gap:.4rem; }
+  .hdr-btn.emergency { background:var(--red); color:#fff; }
+  .hdr-btn.appt { background:var(--blue); color:#fff; }
+  .hdr-btn:hover { opacity:.88; transform:translateY(-1px); }
+
+  /* NAV */
+  .nav { background:var(--navy); position:sticky; top:88px; z-index:999; overflow:visible; }
+  .nav-scroll-wrap { overflow:visible; position:relative; }
+  .nav-inner { width:100%; margin:0 auto; padding:0 1.5rem; display:flex; align-items:center; overflow-x:auto; flex-wrap:nowrap; }
+  .nav-inner::-webkit-scrollbar { height:3px; }
+  .nav-inner::-webkit-scrollbar-thumb { background:rgba(255,255,255,.2); }
+  .nav-item { position:relative; flex-shrink:0; }
+  .nav-item > a { display:flex; align-items:center; gap:.3rem; padding:.8rem .85rem; color:#cdd8f6; font-size:.78rem; font-weight:500; text-decoration:none; white-space:nowrap; transition:.2s; border-bottom:3px solid transparent; }
+  .nav-item > a:hover, .nav-item > a.active { color:#fff; border-bottom-color:var(--gold); background:rgba(255,255,255,.06); }
+
+  /* BREADCRUMB */
+  .breadcrumb { background:var(--gray-50); border-bottom:1px solid var(--gray-200); padding:.6rem 1.5rem; }
+  .breadcrumb-inner { max-width:1300px; margin:0 auto; display:flex; align-items:center; gap:.5rem; font-size:.78rem; color:var(--gray-600); }
+  .breadcrumb a { color:var(--blue); text-decoration:none; }
+  .breadcrumb a:hover { text-decoration:underline; }
+  .breadcrumb i { font-size:.6rem; }
+
+  /* HERO */
+  .page-hero { background:linear-gradient(135deg,var(--navy) 0%,#1a3a80 40%,#0ea5e9 100%); padding:4rem 1.5rem; color:#fff; position:relative; overflow:hidden; }
+  .page-hero::before { content:''; position:absolute; inset:0; background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Ccircle cx='30' cy='30' r='25' fill='none' stroke='rgba(255,255,255,0.04)' stroke-width='1'/%3E%3C/svg%3E") repeat; background-size:60px 60px; }
+  .page-hero-inner { max-width:1300px; margin:0 auto; position:relative; display:grid; grid-template-columns:1fr auto; align-items:center; gap:2rem; }
+  .page-hero-badge { display:inline-flex; align-items:center; gap:.5rem; background:rgba(255,255,255,.12); backdrop-filter:blur(8px); padding:.4rem 1.1rem; border-radius:20px; font-size:.75rem; font-weight:600; letter-spacing:.06em; margin-bottom:1rem; border:1px solid rgba(255,255,255,.2); }
+  .page-hero h2 { font-family:'Playfair Display',serif; font-size:2.6rem; font-weight:800; line-height:1.15; margin-bottom:.8rem; }
+  .page-hero p { opacity:.85; font-size:.95rem; line-height:1.75; max-width:600px; }
+  .hero-stats { display:flex; gap:2rem; margin-top:2rem; flex-wrap:wrap; }
+  .hero-stat { text-align:center; }
+  .hero-stat .n { font-family:'Playfair Display',serif; font-size:2rem; font-weight:800; display:block; }
+  .hero-stat .l { font-size:.72rem; opacity:.75; }
+  .hero-icon-box { background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2); border-radius:20px; padding:2rem; font-size:4rem; text-align:center; flex-shrink:0; }
+
+  /* SECTION */
+  section { padding:4rem 1.5rem; }
+  .section-inner { max-width:1300px; margin:0 auto; }
+  .section-title { text-align:center; margin-bottom:3rem; }
+  .section-title .eyebrow { font-size:.75rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--blue); margin-bottom:.5rem; }
+  .section-title h2 { font-family:'Playfair Display',serif; font-size:2.1rem; font-weight:700; color:var(--navy); }
+  .section-title .divider { width:56px; height:3px; background:linear-gradient(90deg,var(--blue),var(--gold)); margin:1rem auto 0; border-radius:2px; }
+
+  /* UNIT CARDS */
+  .unit-tabs { display:flex; gap:0; border-radius:12px; overflow:hidden; box-shadow:var(--shadow); margin-bottom:3rem; max-width:700px; margin-left:auto; margin-right:auto; }
+  .unit-tab { flex:1; padding:1rem; text-align:center; font-weight:700; font-size:.82rem; cursor:pointer; transition:.2s; border:none; }
+  .unit-tab.icu { background:#e0f2fe; color:#0369a1; }
+  .unit-tab.nicu { background:#fef3c7; color:#92400e; }
+  .unit-tab.picu { background:#d1fae5; color:#065f46; }
+  .unit-tab.active.icu { background:var(--icu-accent); color:#fff; }
+  .unit-tab.active.nicu { background:var(--nicu-accent); color:#fff; }
+  .unit-tab.active.picu { background:var(--picu-accent); color:#fff; }
+  .unit-content { display:none; }
+  .unit-content.active { display:block; animation:fadeInUp .4s ease; }
+  @keyframes fadeInUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+
+  .unit-layout { display:grid; grid-template-columns:1fr 1fr; gap:2rem; align-items:start; }
+  .unit-header { display:flex; align-items:center; gap:1rem; margin-bottom:1.5rem; }
+  .unit-icon { width:64px; height:64px; border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:1.8rem; flex-shrink:0; }
+  .unit-icon.icu { background:#e0f2fe; }
+  .unit-icon.nicu { background:#fef3c7; }
+  .unit-icon.picu { background:#d1fae5; }
+  .unit-header h3 { font-family:'Playfair Display',serif; font-size:1.5rem; color:var(--navy); }
+  .unit-header p { font-size:.78rem; color:var(--gray-600); margin-top:.2rem; }
+  .unit-desc { color:var(--gray-600); line-height:1.8; font-size:.88rem; margin-bottom:1.5rem; }
+
+  .feature-list { list-style:none; display:flex; flex-direction:column; gap:.6rem; }
+  .feature-list li { display:flex; align-items:flex-start; gap:.7rem; font-size:.82rem; color:var(--gray-700); line-height:1.5; }
+  .feature-list li i { color:var(--blue); font-size:.8rem; margin-top:.2rem; flex-shrink:0; }
+
+  .stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-top:1.5rem; }
+  .mini-stat { background:var(--gray-50); border-radius:10px; padding:1rem; text-align:center; border:1px solid var(--gray-200); }
+  .mini-stat .n { font-family:'Playfair Display',serif; font-size:1.6rem; font-weight:700; display:block; }
+  .mini-stat .n.icu { color:var(--icu-accent); }
+  .mini-stat .n.nicu { color:var(--nicu-accent); }
+  .mini-stat .n.picu { color:var(--picu-accent); }
+  .mini-stat .l { font-size:.7rem; color:var(--gray-600); margin-top:.2rem; }
+
+  .unit-img-box { border-radius:16px; overflow:hidden; }
+  .unit-img-placeholder { height:300px; border-radius:16px; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:.8rem; font-size:4rem; border:2px dashed; }
+  .unit-img-placeholder.icu { background:linear-gradient(135deg,#e0f2fe,#bae6fd); border-color:#7dd3fc; }
+  .unit-img-placeholder.nicu { background:linear-gradient(135deg,#fef9c3,#fde68a); border-color:#fcd34d; }
+  .unit-img-placeholder.picu { background:linear-gradient(135deg,#dcfce7,#bbf7d0); border-color:#6ee7b7; }
+  .unit-img-placeholder span { font-size:.8rem; font-weight:600; color:var(--gray-600); }
+
+  /* EQUIPMENT */
+  .equip-section { background:var(--gray-50); }
+  .equip-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:1rem; }
+  .equip-card { background:#fff; border-radius:10px; padding:1.2rem; box-shadow:var(--shadow-sm); border:1px solid var(--gray-200); display:flex; gap:.8rem; align-items:flex-start; transition:.2s; }
+  .equip-card:hover { box-shadow:var(--shadow); border-color:var(--blue-light); transform:translateY(-2px); }
+  .equip-card i { font-size:1.2rem; color:var(--blue); flex-shrink:0; margin-top:.1rem; }
+  .equip-card h4 { font-size:.82rem; font-weight:700; color:var(--navy); margin-bottom:.2rem; }
+  .equip-card p { font-size:.73rem; color:var(--gray-600); line-height:1.4; }
+
+  /* TEAM */
+  .team-section { background:#fff; }
+  .team-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1.5rem; }
+  .team-card { background:var(--gray-50); border-radius:14px; overflow:hidden; box-shadow:var(--shadow-sm); border:1px solid var(--gray-200); transition:.25s; text-align:center; }
+  .team-card:hover { box-shadow:var(--shadow); transform:translateY(-4px); }
+  .team-photo { height:180px; background:linear-gradient(135deg,var(--sky),#dbeafe); display:flex; align-items:center; justify-content:center; font-size:3.5rem; }
+  .team-info { padding:1.2rem 1rem; }
+  .team-info h4 { font-size:.9rem; font-weight:700; color:var(--navy); margin-bottom:.2rem; }
+  .team-info .role { font-size:.75rem; color:var(--blue); font-weight:600; margin-bottom:.3rem; }
+  .team-info .qual { font-size:.72rem; color:var(--gray-600); }
+
+  /* PROCESS */
+  .process-section { background:linear-gradient(135deg,var(--navy),#1a3a80); color:#fff; }
+  .process-steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1.5rem; margin-top:2rem; }
+  .process-step { background:rgba(255,255,255,.08); border-radius:12px; padding:1.5rem; border:1px solid rgba(255,255,255,.1); text-align:center; position:relative; }
+  .step-num { width:40px; height:40px; background:var(--gold); border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:1rem; color:#fff; margin:0 auto .8rem; }
+  .process-step i { font-size:1.5rem; color:var(--gold); margin-bottom:.5rem; display:block; }
+  .process-step h4 { font-size:.85rem; font-weight:700; margin-bottom:.4rem; }
+  .process-step p { font-size:.75rem; opacity:.8; line-height:1.5; }
+
+  /* EMERGENCY BANNER */
+  .emg-banner { background:linear-gradient(90deg,#dc2626,#b91c1c); color:#fff; padding:2.5rem 1.5rem; text-align:center; }
+  .emg-banner h3 { font-family:'Playfair Display',serif; font-size:1.6rem; margin-bottom:.5rem; }
+  .emg-banner p { opacity:.9; font-size:.88rem; margin-bottom:1.5rem; }
+  .emg-nums { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; }
+  .emg-num-chip { background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.3); border-radius:10px; padding:.7rem 1.5rem; font-size:1rem; font-weight:800; }
+  .emg-num-chip span { font-size:.7rem; font-weight:400; opacity:.8; display:block; }
+
+  /* FOOTER */
+  footer { background:var(--gray-800); color:#94a3b8; }
+  .footer-main { max-width:1300px; margin:0 auto; padding:3rem 1.5rem; display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:2rem; }
+  .footer-brand img { width:60px; height:60px; border-radius:50%; margin-bottom:1rem; }
+  .footer-brand h3 { font-family:'Playfair Display',serif; font-size:1rem; color:#fff; margin-bottom:.5rem; }
+  .footer-brand p { font-size:.76rem; line-height:1.7; }
+  .footer-col h4 { font-size:.82rem; font-weight:700; color:#fff; margin-bottom:1rem; text-transform:uppercase; letter-spacing:.06em; }
+  .footer-col a { display:block; font-size:.78rem; color:#94a3b8; text-decoration:none; margin-bottom:.4rem; transition:.15s; }
+  .footer-col a:hover { color:#fff; padding-left:.3rem; }
+  .social-row { display:flex; gap:.7rem; margin-top:1rem; }
+  .social-icon { width:34px; height:34px; border-radius:8px; background:rgba(255,255,255,.08); display:flex; align-items:center; justify-content:center; color:#94a3b8; text-decoration:none; transition:.2s; font-size:.9rem; }
+  .social-icon:hover { background:var(--blue); color:#fff; }
+  .footer-bottom { border-top:1px solid rgba(255,255,255,.08); padding:1.2rem 1.5rem; text-align:center; font-size:.75rem; color:#64748b; max-width:1300px; margin:0 auto; }
+
+  #scrollTop { position:fixed; bottom:1.5rem; right:1.5rem; width:44px; height:44px; background:var(--blue); color:#fff; border:none; border-radius:50%; font-size:1.1rem; cursor:pointer; box-shadow:var(--shadow); transition:.2s; display:none; z-index:9999; align-items:center; justify-content:center; }
+  #scrollTop:hover { background:var(--navy); }
+
+  @media(max-width:900px) { .unit-layout { grid-template-columns:1fr; } .page-hero-inner { grid-template-columns:1fr; } .hero-icon-box { display:none; } }
+  @media(max-width:600px) { .header-main { flex-wrap:wrap; } .header-right { display:none; } .page-hero h2 { font-size:1.8rem; } .inst-name h1 { font-size:.95rem; } .stats-row { grid-template-columns:1fr 1fr; } }
+</style>
+</head>
+<body>
+
+<div class="emergency-bar">
+  🚨 24/7 Emergency: <strong>+91-9031818116</strong> &nbsp;|&nbsp; Ambulance: <strong>108</strong> &nbsp;|&nbsp; ICU Helpline: <strong>+91-9031818119</strong>
+</div>
+<div class="top-bar">
+  <div class="tb-inner">
+    <div class="tb-left">
+      <span><i class="fas fa-map-marker-alt"></i> Koyala Belwa, Chakia, East Champaran, Bihar</span>
+      <span><i class="fas fa-phone"></i> 06252-XXXXXX</span>
+      <span><i class="fas fa-envelope"></i> info@vrims.edu.in</span>
+    </div>
+    <div class="tb-right">
+      <a href="#" class="tb-btn pay"><i class="fas fa-credit-card"></i> Pay Online</a>
+      <a href="#" class="tb-btn patient"><i class="fas fa-user"></i> Patient Portal</a>
+      <a href="#" class="tb-btn student"><i class="fas fa-graduation-cap"></i> Student Portal</a>
+    </div>
+  </div>
+</div>
+
+<header>
+  <div class="header-main">
+    <div class="logo-wrap">
+      <img src="logo-croped.png" alt="VRIMS Logo">
+      <div class="inst-name">
+        <h1>Viraat Ramayan Institute of Medical Sciences</h1>
+        <p>Hospital &amp; Medical College &nbsp;|&nbsp; Koyala Belwa, Chakia, East Champaran, Bihar</p>
+        <span class="nmc-badge">✔ NMC Approved</span>
+      </div>
+    </div>
+    <div class="header-right">
+      <a href="index.html#emergency" class="hdr-btn emergency"><i class="fas fa-ambulance"></i> Emergency</a>
+      <a href="index.html#contact" class="hdr-btn appt"><i class="fas fa-calendar-check"></i> Book Appointment</a>
+    </div>
+  </div>
+</header>
+
+<nav class="nav">
+  <div class="nav-scroll-wrap">
+    <div class="nav-inner">
+      <div class="nav-item"><a href="index.html">Home</a></div>
+      <div class="nav-item"><a href="#">About Us</a></div>
+      <div class="nav-item"><a href="administration.html">Administration</a></div>
+      <div class="nav-item"><a href="#" class="active">Hospital Services</a></div>
+      <div class="nav-item"><a href="#">Medical College</a></div>
+      <div class="nav-item"><a href="#">Departments</a></div>
+      <div class="nav-item"><a href="academic.html">Academics</a></div>
+      <div class="nav-item"><a href="#">Research</a></div>
+      <div class="nav-item"><a href="index.html#opd">OPD Services</a></div>
+      <div class="nav-item"><a href="#">IPD Services</a></div>
+      <div class="nav-item"><a href="index.html#emergency">Emergency</a></div>
+      <div class="nav-item"><a href="#">Faculty</a></div>
+      <div class="nav-item"><a href="#">Students</a></div>
+      <div class="nav-item"><a href="index.html#nmc">NMC Details</a></div>
+      <div class="nav-item"><a href="#">Tenders</a></div>
+      <div class="nav-item"><a href="index.html#notice">Notices</a></div>
+      <div class="nav-item"><a href="index.html#gallery">Gallery</a></div>
+      <div class="nav-item"><a href="#">Careers</a></div>
+      <div class="nav-item"><a href="index.html#contact">Contact Us</a></div>
+    </div>
+  </div>
+</nav>
+
+<div class="breadcrumb">
+  <div class="breadcrumb-inner">
+    <a href="index.html"><i class="fas fa-home"></i> Home</a>
+    <i class="fas fa-chevron-right"></i>
+    <a href="#">Hospital Services</a>
+    <i class="fas fa-chevron-right"></i>
+    <span>ICU / NICU / PICU</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <div>
+      <div class="page-hero-badge"><i class="fas fa-heartbeat"></i> Critical Care Services</div>
+      <h2>ICU / NICU / PICU<br>Critical Care Units</h2>
+      <p>State-of-the-art critical care facilities providing round-the-clock intensive monitoring and life-saving treatment for adults, newborns, and children across all age groups.</p>
+      <div class="hero-stats">
+        <div class="hero-stat"><span class="n">40+</span><span class="l">ICU Beds</span></div>
+        <div class="hero-stat"><span class="n">24×7</span><span class="l">Specialist Cover</span></div>
+        <div class="hero-stat"><span class="n">3</span><span class="l">Critical Care Units</span></div>
+        <div class="hero-stat"><span class="n">100%</span><span class="l">Monitored Beds</span></div>
+      </div>
+    </div>
+    <div class="hero-icon-box">💓<br><span style="font-size:1rem;display:block;margin-top:.5rem;color:rgba(255,255,255,.7);font-size:.8rem">Critical Care</span></div>
+  </div>
+</div>
+
+<!-- UNIT SECTIONS -->
+<section>
+  <div class="section-inner">
+    <div class="section-title">
+      <div class="eyebrow">Critical Care Units</div>
+      <h2>Our Intensive Care Facilities</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="unit-tabs">
+      <button class="unit-tab icu active" onclick="showUnit('icu')"><i class="fas fa-heartbeat"></i> ICU — Adult</button>
+      <button class="unit-tab nicu" onclick="showUnit('nicu')"><i class="fas fa-baby"></i> NICU — Neonatal</button>
+      <button class="unit-tab picu" onclick="showUnit('picu')"><i class="fas fa-child"></i> PICU — Paediatric</button>
+    </div>
+
+    <!-- ICU -->
+    <div id="unit-icu" class="unit-content active">
+      <div class="unit-layout">
+        <div>
+          <div class="unit-header">
+            <div class="unit-icon icu"><i class="fas fa-heartbeat" style="color:#0ea5e9"></i></div>
+            <div>
+              <h3>Intensive Care Unit (ICU)</h3>
+              <p>Adult Critical Care · 24×7 Intensivist-led</p>
+            </div>
+          </div>
+          <p class="unit-desc">The Medical &amp; Surgical ICU at VRIMS is equipped with cutting-edge life-support technology and managed by trained intensivists and critical care nurses around the clock. Every bed is centrally monitored with multi-parameter monitors to ensure optimal patient outcomes.</p>
+          <ul class="feature-list">
+            <li><i class="fas fa-check-circle"></i> Ventilator support with advanced modes (CPAP, BiPAP, volume/pressure control)</li>
+            <li><i class="fas fa-check-circle"></i> Central line insertion, arterial line monitoring</li>
+            <li><i class="fas fa-check-circle"></i> Continuous multi-parameter vital monitoring</li>
+            <li><i class="fas fa-check-circle"></i> Haemodynamic monitoring and management</li>
+            <li><i class="fas fa-check-circle"></i> Point-of-care testing (ABG, electrolytes, lactate)</li>
+            <li><i class="fas fa-check-circle"></i> Bedside echocardiography &amp; bronchoscopy</li>
+            <li><i class="fas fa-check-circle"></i> Post-operative care for major surgeries</li>
+            <li><i class="fas fa-check-circle"></i> Sepsis protocol and evidence-based bundles</li>
+          </ul>
+          <div class="stats-row">
+            <div class="mini-stat"><span class="n icu">20+</span><div class="l">ICU Beds</div></div>
+            <div class="mini-stat"><span class="n icu">24/7</span><div class="l">Intensivist</div></div>
+            <div class="mini-stat"><span class="n icu">1:2</span><div class="l">Nurse–Bed Ratio</div></div>
+          </div>
+        </div>
+        <div>
+          <div class="unit-img-placeholder icu">💓<span>Adult Intensive Care Unit</span></div>
+          <div style="margin-top:1.5rem;background:var(--sky);border-radius:12px;padding:1.2rem;">
+            <h4 style="color:var(--navy);font-size:.85rem;font-weight:700;margin-bottom:.8rem;"><i class="fas fa-clipboard-list" style="color:var(--icu-accent)"></i> &nbsp;Conditions Managed</h4>
+            <ul class="feature-list">
+              <li><i class="fas fa-dot-circle" style="color:var(--icu-accent)"></i> Acute respiratory failure &amp; ARDS</li>
+              <li><i class="fas fa-dot-circle" style="color:var(--icu-accent)"></i> Multi-organ dysfunction syndrome</li>
+              <li><i class="fas fa-dot-circle" style="color:var(--icu-accent)"></i> Cardiac arrest &amp; post-resuscitation care</li>
+              <li><i class="fas fa-dot-circle" style="color:var(--icu-accent)"></i> Severe sepsis and septic shock</li>
+              <li><i class="fas fa-dot-circle" style="color:var(--icu-accent)"></i> Drug overdose &amp; poisoning</li>
+              <li><i class="fas fa-dot-circle" style="color:var(--icu-accent)"></i> Traumatic brain injury</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NICU -->
+    <div id="unit-nicu" class="unit-content">
+      <div class="unit-layout">
+        <div>
+          <div class="unit-header">
+            <div class="unit-icon nicu"><i class="fas fa-baby" style="color:#f59e0b"></i></div>
+            <div>
+              <h3>Neonatal Intensive Care Unit (NICU)</h3>
+              <p>Newborn Critical Care · 0–28 days</p>
+            </div>
+          </div>
+          <p class="unit-desc">VRIMS NICU provides specialised intensive care for sick newborns including premature infants, babies with low birth weight, and neonates with birth complications. Our neonatology team provides compassionate, evidence-based care using modern incubators and life-support systems.</p>
+          <ul class="feature-list">
+            <li><i class="fas fa-check-circle"></i> Servo-controlled incubators for thermoregulation</li>
+            <li><i class="fas fa-check-circle"></i> High-frequency oscillatory ventilation (HFOV)</li>
+            <li><i class="fas fa-check-circle"></i> Surfactant therapy for premature lungs</li>
+            <li><i class="fas fa-check-circle"></i> Total parenteral nutrition (TPN) support</li>
+            <li><i class="fas fa-check-circle"></i> Phototherapy units for neonatal jaundice</li>
+            <li><i class="fas fa-check-circle"></i> Umbilical catheterisation &amp; vascular access</li>
+            <li><i class="fas fa-check-circle"></i> Kangaroo Mother Care (KMC) facility</li>
+            <li><i class="fas fa-check-circle"></i> Neonatal transport incubator</li>
+          </ul>
+          <div class="stats-row">
+            <div class="mini-stat"><span class="n nicu">12+</span><div class="l">NICU Beds</div></div>
+            <div class="mini-stat"><span class="n nicu">24/7</span><div class="l">Neonatologist</div></div>
+            <div class="mini-stat"><span class="n nicu">1:1</span><div class="l">Nurse–Baby Ratio</div></div>
+          </div>
+        </div>
+        <div>
+          <div class="unit-img-placeholder nicu">👶<span>Neonatal Intensive Care Unit</span></div>
+          <div style="margin-top:1.5rem;background:#fffbeb;border-radius:12px;padding:1.2rem;border:1px solid #fde68a;">
+            <h4 style="color:var(--navy);font-size:.85rem;font-weight:700;margin-bottom:.8rem;"><i class="fas fa-clipboard-list" style="color:var(--nicu-accent)"></i> &nbsp;Conditions Managed</h4>
+            <ul class="feature-list">
+              <li><i class="fas fa-dot-circle" style="color:var(--nicu-accent)"></i> Prematurity &amp; very low birth weight</li>
+              <li><i class="fas fa-dot-circle" style="color:var(--nicu-accent)"></i> Respiratory distress syndrome (RDS)</li>
+              <li><i class="fas fa-dot-circle" style="color:var(--nicu-accent)"></i> Birth asphyxia &amp; hypoxic encephalopathy</li>
+              <li><i class="fas fa-dot-circle" style="color:var(--nicu-accent)"></i> Neonatal sepsis &amp; infections</li>
+              <li><i class="fas fa-dot-circle" style="color:var(--nicu-accent)"></i> Severe neonatal jaundice</li>
+              <li><i class="fas fa-dot-circle" style="color:var(--nicu-accent)"></i> Congenital anomalies requiring stabilisation</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PICU -->
+    <div id="unit-picu" class="unit-content">
+      <div class="unit-layout">
+        <div>
+          <div class="unit-header">
+            <div class="unit-icon picu"><i class="fas fa-child" style="color:#10b981"></i></div>
+            <div>
+              <h3>Paediatric Intensive Care Unit (PICU)</h3>
+              <p>Children's Critical Care · 1 month – 18 years</p>
+            </div>
+          </div>
+          <p class="unit-desc">VRIMS PICU is a dedicated critical care facility for critically ill children from infancy through adolescence. Our paediatric intensivists and specialised nursing team deliver age-appropriate, family-centred intensive care using equipment specifically sized for children.</p>
+          <ul class="feature-list">
+            <li><i class="fas fa-check-circle"></i> Paediatric ventilators with age-specific modes</li>
+            <li><i class="fas fa-check-circle"></i> Non-invasive positive pressure ventilation (NIPPV)</li>
+            <li><i class="fas fa-check-circle"></i> Continuous renal replacement therapy (CRRT)</li>
+            <li><i class="fas fa-check-circle"></i> Intraosseous access &amp; vascular cut-down</li>
+            <li><i class="fas fa-check-circle"></i> Paediatric crash cart &amp; resuscitation trolley</li>
+            <li><i class="fas fa-check-circle"></i> Enteral and parenteral nutrition</li>
+            <li><i class="fas fa-check-circle"></i> Family-centred care with parent counselling</li>
+            <li><i class="fas fa-check-circle"></i> Child life support (PALS) certified staff</li>
+          </ul>
+          <div class="stats-row">
+            <div class="mini-stat"><span class="n picu">10+</span><div class="l">PICU Beds</div></div>
+            <div class="mini-stat"><span class="n picu">24/7</span><div class="l">Paed. Intensivist</div></div>
+            <div class="mini-stat"><span class="n picu">1:2</span><div class="l">Nurse–Child Ratio</div></div>
+          </div>
+        </div>
+        <div>
+          <div class="unit-img-placeholder picu">🧒<span>Paediatric Intensive Care Unit</span></div>
+          <div style="margin-top:1.5rem;background:#f0fdf4;border-radius:12px;padding:1.2rem;border:1px solid #bbf7d0;">
+            <h4 style="color:var(--navy);font-size:.85rem;font-weight:700;margin-bottom:.8rem;"><i class="fas fa-clipboard-list" style="color:var(--picu-accent)"></i> &nbsp;Conditions Managed</h4>
+            <ul class="feature-list">
+              <li><i class="fas fa-dot-circle" style="color:var(--picu-accent)"></i> Acute respiratory failure in children</li>
+              <li><i class="fas fa-dot-circle" style="color:var(--picu-accent)"></i> Status epilepticus &amp; encephalopathy</li>
+              <li><i class="fas fa-dot-circle" style="color:var(--picu-accent)"></i> Severe dengue, malaria, enteric fever</li>
+              <li><i class="fas fa-dot-circle" style="color:var(--picu-accent)"></i> Post-operative paediatric surgical care</li>
+              <li><i class="fas fa-dot-circle" style="color:var(--picu-accent)"></i> Diabetic ketoacidosis (DKA)</li>
+              <li><i class="fas fa-dot-circle" style="color:var(--picu-accent)"></i> Paediatric trauma &amp; poisoning</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EQUIPMENT -->
+<section class="equip-section">
+  <div class="section-inner">
+    <div class="section-title">
+      <div class="eyebrow">Infrastructure</div>
+      <h2>Advanced Equipment &amp; Technology</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="equip-grid">
+      <div class="equip-card"><i class="fas fa-lungs"></i><div><h4>Mechanical Ventilators</h4><p>Adult, paediatric &amp; neonatal ventilators with advanced ventilation modes.</p></div></div>
+      <div class="equip-card"><i class="fas fa-heart"></i><div><h4>Cardiac Monitors</h4><p>Multi-parameter bedside monitors with central nurse station display.</p></div></div>
+      <div class="equip-card"><i class="fas fa-syringe"></i><div><h4>Infusion Pumps</h4><p>Syringe and volumetric pumps for precise drug &amp; fluid delivery.</p></div></div>
+      <div class="equip-card"><i class="fas fa-thermometer"></i><div><h4>Servo Incubators</h4><p>Temperature-controlled incubators for premature &amp; sick neonates.</p></div></div>
+      <div class="equip-card"><i class="fas fa-wave-square"></i><div><h4>Defibrillators</h4><p>Biphasic defibrillators with AED mode for cardiac emergencies.</p></div></div>
+      <div class="equip-card"><i class="fas fa-vial"></i><div><h4>ABG Analyser</h4><p>Point-of-care arterial blood gas analysis with instant results.</p></div></div>
+      <div class="equip-card"><i class="fas fa-eye"></i><div><h4>Bedside Echo</h4><p>Portable ultrasound for bedside echocardiography &amp; vascular access.</p></div></div>
+      <div class="equip-card"><i class="fas fa-filter"></i><div><h4>CRRT Machine</h4><p>Continuous renal replacement therapy for critically ill patients.</p></div></div>
+      <div class="equip-card"><i class="fas fa-sun"></i><div><h4>Phototherapy Units</h4><p>LED double-surface phototherapy for neonatal jaundice treatment.</p></div></div>
+      <div class="equip-card"><i class="fas fa-video"></i><div><h4>CCTV Monitoring</h4><p>24×7 camera surveillance with nurse station viewing for all bays.</p></div></div>
+      <div class="equip-card"><i class="fas fa-database"></i><div><h4>Central Monitoring</h4><p>Centralised nursing station monitoring all patients simultaneously.</p></div></div>
+      <div class="equip-card"><i class="fas fa-ambulance"></i><div><h4>Transport Incubator</h4><p>Neonatal transport incubator with ventilator for inter-unit transfers.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ADMISSION PROCESS -->
+<section class="process-section">
+  <div class="section-inner">
+    <div class="section-title">
+      <div class="eyebrow" style="color:#93c5fd">ICU Admission</div>
+      <h2 style="color:#fff">ICU Admission Process</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="process-steps">
+      <div class="process-step">
+        <div class="step-num">1</div>
+        <i class="fas fa-ambulance"></i>
+        <h4>Emergency / OPD Referral</h4>
+        <p>Patient referred from Emergency, OPD, or ward based on clinical assessment by treating physician.</p>
+      </div>
+      <div class="process-step">
+        <div class="step-num">2</div>
+        <i class="fas fa-stethoscope"></i>
+        <h4>Intensivist Assessment</h4>
+        <p>Dedicated ICU intensivist evaluates and confirms need for intensive monitoring or ventilatory support.</p>
+      </div>
+      <div class="process-step">
+        <div class="step-num">3</div>
+        <i class="fas fa-file-medical"></i>
+        <h4>Consent &amp; Documentation</h4>
+        <p>Informed consent obtained from patient/guardian. Medical history and admission papers completed.</p>
+      </div>
+      <div class="process-step">
+        <div class="step-num">4</div>
+        <i class="fas fa-bed"></i>
+        <h4>Bed Allotment</h4>
+        <p>Appropriate ICU/NICU/PICU bed assigned based on condition, age group, and availability.</p>
+      </div>
+      <div class="process-step">
+        <div class="step-num">5</div>
+        <i class="fas fa-users"></i>
+        <h4>Family Communication</h4>
+        <p>Daily doctor-family briefing at fixed timing. One attendant permitted during visiting hours.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EMERGENCY BANNER -->
+<div class="emg-banner">
+  <h3>🚨 ICU Emergency Helpline</h3>
+  <p>For ICU admission queries or critical care emergencies, call us immediately — available 24 hours, 7 days a week.</p>
+  <div class="emg-nums">
+    <div class="emg-num-chip">+91-9031818119<span>ICU Helpline</span></div>
+    <div class="emg-num-chip">+91-9031818120<span>Emergency Line</span></div>
+    <div class="emg-num-chip">108<span>Ambulance</span></div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-main">
+    <div class="footer-brand">
+      <img src="logo-croped.png" alt="VRIMS Logo">
+      <h3>Viraat Ramayan Institute of Medical Sciences</h3>
+      <p>A premier NMC-recognised institution dedicated to healthcare excellence and medical education in Bihar.</p>
+      <div class="social-row">
+        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <a href="index.html">Home</a>
+      <a href="index.html#services">Hospital Services</a>
+      <a href="index.html#opd">OPD Schedule</a>
+      <a href="index.html#emergency">Emergency</a>
+      <a href="index.html#contact">Contact Us</a>
+    </div>
+    <div class="footer-col">
+      <h4>Critical Care</h4>
+      <a href="icu-nicu-picu.html">ICU / NICU / PICU</a>
+      <a href="blood-bank.html">Blood Bank</a>
+      <a href="dialysis.html">Dialysis Unit</a>
+      <a href="emergency-trauma.html">Emergency &amp; Trauma</a>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <a href="#">Koyala Belwa, Chakia,<br>East Champaran, Bihar – 845412</a>
+      <a href="tel:+919031818116">Emergency: +91-9031818116</a>
+      <a href="mailto:info@vrims.edu.in">info@vrims.edu.in</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Viraat Ramayan Institute of Medical Sciences, Koyala Belwa, Chakia, East Champaran, Bihar. All Rights Reserved.</p>
+  </div>
+</footer>
+
+<button id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="fas fa-arrow-up"></i></button>
+
+<script>
+function showUnit(unit) {
+  ['icu','nicu','picu'].forEach(u => {
+    document.getElementById('unit-'+u).classList.toggle('active', u === unit);
+    document.querySelector('.unit-tab.'+u).classList.toggle('active', u === unit);
+  });
+}
+const scrollBtn = document.getElementById('scrollTop');
+window.addEventListener('scroll', () => { scrollBtn.style.display = window.scrollY > 400 ? 'flex' : 'none'; });
+</script>
+</body>
+</html>
